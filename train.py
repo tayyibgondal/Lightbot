@@ -69,11 +69,12 @@ def create_training_data(all_words, tags, xy):
     y_train = []
     for (pattern_sentence, tag) in xy:
         bag = bag_of_words(pattern_sentence, all_words)
-        X_train.append(bag)
+        X_train.append(bag.astype(np.float32))  # Convert to float32
         label = tags.index(tag)
         y_train.append(label)
 
     return np.array(X_train), np.array(y_train)
+
 
 # Create dataset
 def create_dataset(X_train, y_train):
@@ -121,7 +122,7 @@ def train_model(model, train_loader, num_epochs):
     for epoch in range(num_epochs):
         for (words, labels) in train_loader:
             words = words.to(device)
-            labels = labels.to(dtype=torch.long).to(device)
+            labels = labels.to(device)
             
             outputs = model(words)
             loss = criterion(outputs, labels)
