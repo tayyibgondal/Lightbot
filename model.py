@@ -50,5 +50,6 @@ class NeuralNet(nn.Module):
         out = self.relu(out)
         out = self.l3(out)
 
+
         # No activation and no softmax at the end (intended for use with CrossEntropyLoss)
         return out
