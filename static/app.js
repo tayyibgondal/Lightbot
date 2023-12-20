@@ -1,14 +1,38 @@
+/**
+ * Class representing a simple chatbox interface.
+ */
 class Chatbox {
+  /**
+   * Create a Chatbox instance.
+   */
   constructor() {
+    /**
+     * @property {Object} args - The arguments containing DOM elements.
+     * @property {HTMLElement} args.openButton - The button to open/close the chatbox.
+     * @property {HTMLElement} args.chatBox - The container for the chatbox.
+     * @property {HTMLElement} args.sendButton - The button to send a message.
+     */
     this.args = {
       openButton: document.querySelector(".chatbox__button"),
       chatBox: document.querySelector(".chatbox__support"),
       sendButton: document.querySelector(".send__button"),
     };
+
+    /**
+     * @property {boolean} state - The state of the chatbox (open or closed).
+     */
     this.state = false;
+  
+    /**
+     * @property {Array} messages - An array to store chat messages.
+     * Each message is an object with properties 'name' and 'message'.
+     */
     this.messages = [];
   }
 
+  /**
+   * Display the chatbox and set up event listeners.
+   */
   display() {
     const { openButton, chatBox, sendButton } = this.args;
 
@@ -24,6 +48,10 @@ class Chatbox {
     });
   }
 
+  /**
+   * Toggle the state of the chatbox (open or closed).
+   * @param {HTMLElement} chatbox - The chatbox container element.
+   */
   toggleState(chatbox) {
     this.state = !this.state;
 
@@ -34,6 +62,10 @@ class Chatbox {
     }
   }
 
+  /**
+   * Handle sending a message from the user.
+   * @param {HTMLElement} chatbox - The chatbox container element.
+   */
   onSendButton(chatbox) {
     var textField = chatbox.querySelector("input");
     let text1 = textField.value;
@@ -41,9 +73,11 @@ class Chatbox {
       return;
     }
 
+    // Create a message object for the user's input.
     let msg1 = { name: "User", message: text1 };
     this.messages.push(msg1);
 
+    // Send the user's message to the server for a response.
     fetch($SCRIPT_ROOT + "/predict", {
       method: "POST",
       body: JSON.stringify({ message: text1 }),
@@ -54,7 +88,7 @@ class Chatbox {
     })
       .then((r) => r.json())
       .then((r) => {
-        // display message back to the user
+        // Display message back to the user
         let msg2 = { name: "Sam", message: r.answer };
         this.messages.push(msg2);
         this.updateChatText(chatbox);
@@ -66,6 +100,10 @@ class Chatbox {
       });
   }
 
+  /**
+   * Update the chatbox's message display.
+   * @param {HTMLElement} chatbox - The chatbox container element.
+   */
   updateChatText(chatbox) {
     var html = '';
     this.messages.slice().reverse().forEach(function(item,index) {
@@ -82,5 +120,6 @@ class Chatbox {
   }
 }
 
+// Create an instance of the Chatbox class and display the chatbox.
 const chatbox = new Chatbox();
 chatbox.display();
