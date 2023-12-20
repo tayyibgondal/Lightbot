@@ -5,12 +5,27 @@ app = Flask(__name__)
 
 @app.get("/")
 def index_get():
+    """
+    Endpoint: GET '/'
+    
+    Renders the home page for user interaction.
+    """
     return render_template("base.html")
 
 @app.post("/predict")
 def predict():
+    """
+    Endpoint: POST '/predict'
+    
+    Handles POST requests for user input and returns the chatbot's response.
+    
+    Payload:
+        - JSON with a 'message' field containing the user input.
+    
+    Returns:
+        - JSON response containing the chatbot's answer.
+    """
     text = request.get_json().get("message")
-    # TODO: Check if text is valid
     
     response = get_response(text)
     message = {"answer": response}
